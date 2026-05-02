@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Code2, Megaphone, Palette, PenTool, ArrowUpRight, Mail, MapPin, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Code2, Megaphone, Palette, PenTool, ArrowUpRight, Mail, Phone, Instagram, Linkedin, Youtube, ArrowUp } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import ContactForm from "@/components/ContactForm";
 import MagneticButton from "@/components/MagneticButton";
@@ -324,26 +324,105 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 py-10 md:py-14">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="flex items-center gap-3">
-          <span className="font-black text-xl">2.07</span>
-          <span className="text-xs uppercase tracking-[0.3em] text-white/50">Studio</span>
-        </div>
-        <div className="flex items-center gap-6 text-white/60 text-sm">
-          <span className="inline-flex items-center gap-2"><Mail className="w-4 h-4" /> hello@207.studio</span>
-          <span className="hidden md:inline-flex items-center gap-2"><MapPin className="w-4 h-4" /> Worldwide</span>
-        </div>
-        <div className="flex items-center gap-4">
-          {[Instagram, Twitter, Linkedin].map((Ic, i) => (
-            <a key={i} href="#" aria-label="social" className="text-white/60 hover:text-white transition-colors">
-              <Ic className="w-5 h-5" />
-            </a>
-          ))}
+    <footer className="relative border-t border-white/10 bg-black overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-30 pointer-events-none" aria-hidden />
+
+      {/* Oversized brand mark */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24">
+        <div className="flex items-end justify-between gap-6 flex-wrap">
+          <h2 className="font-black tracking-tighter uppercase leading-[0.85] text-[22vw] md:text-[16vw] lg:text-[12rem] text-white">
+            2.07
+            <span className="text-white/20">.studio</span>
+          </h2>
+          <a
+            href="#top"
+            className="group inline-flex items-center gap-3 border border-white/30 px-5 py-3 uppercase text-[10px] tracking-[0.3em] text-white/70 hover:bg-white hover:text-black hover:border-white transition-colors"
+          >
+            Back to top <ArrowUp className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
+          </a>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-6 md:px-10 mt-6 text-[11px] uppercase tracking-[0.2em] text-white/30">
-        © {new Date().getFullYear()} 2.07 Studio — All rights reserved.
+
+      {/* Main grid */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-10 mt-12 md:mt-20 pb-10 md:pb-14 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 border-t border-white/10 pt-12 md:pt-16">
+        {/* Brand blurb */}
+        <div className="md:col-span-4 space-y-5">
+          <div className="flex items-center gap-3">
+            <span className="font-black text-2xl tracking-tight">2.07</span>
+            <span className="text-[10px] uppercase tracking-[0.4em] text-white/50">Studio</span>
+          </div>
+          <p className="text-sm text-white/60 leading-relaxed max-w-xs">
+            A digital marketing & creative studio crafting brands, products, and content that take shape.
+          </p>
+        </div>
+
+        {/* Contact */}
+        <div className="md:col-span-3 space-y-5">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">Contact</p>
+          <ul className="space-y-3 text-sm">
+            <li>
+              <a href="tel:7016498118" className="group inline-flex items-center gap-3 text-white/70 hover:text-white transition-colors">
+                <Phone className="w-4 h-4 stroke-[1.5]" />
+                <span className="border-b border-transparent group-hover:border-white/40">7016498118</span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:2.07studiomarketing@gmail.com" className="group inline-flex items-start gap-3 text-white/70 hover:text-white transition-colors break-all">
+                <Mail className="w-4 h-4 stroke-[1.5] mt-0.5 shrink-0" />
+                <span className="border-b border-transparent group-hover:border-white/40">2.07studiomarketing@gmail.com</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Social */}
+        <div className="md:col-span-3 space-y-5">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">Social</p>
+          <ul className="space-y-3 text-sm">
+            {[
+              { Icon: Instagram, label: "@2.07_studio_", href: "https://instagram.com/2.07_studio_" },
+              { Icon: Youtube, label: "@2.07studio", href: "https://youtube.com/@2.07studio" },
+              { Icon: Linkedin, label: "LinkedIn", href: "#" },
+            ].map(({ Icon, label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center gap-3 text-white/70 hover:text-white transition-colors"
+                >
+                  <Icon className="w-4 h-4 stroke-[1.5]" />
+                  <span className="border-b border-transparent group-hover:border-white/40">{label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Legal / Nav */}
+        <div className="md:col-span-2 space-y-5">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">Legal</p>
+          <ul className="space-y-3 text-sm">
+            <li>
+              <a href="#" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
+                Terms & Conditions
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="relative border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
+          <span>© {new Date().getFullYear()} 2.07 Studio — All rights reserved.</span>
+          <span>Where idea takes shape.</span>
+        </div>
       </div>
     </footer>
   );
