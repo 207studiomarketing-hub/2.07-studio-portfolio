@@ -7,9 +7,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  // તમારી રિપોઝિટરીનું નામ સ્લેશની વચ્ચે લખો
-  base: '/2.07-studio-portfolio/', 
-  plugins: [react()],
-})
+export default defineConfig();
 
