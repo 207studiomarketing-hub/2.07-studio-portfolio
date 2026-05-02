@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Code2, Megaphone, Palette, PenTool, ArrowUpRight, Mail, Phone, Instagram, Linkedin, Youtube, ArrowUp } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
@@ -404,14 +404,14 @@ function Footer() {
           <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">Legal</p>
           <ul className="space-y-3 text-sm">
             <li>
-              <a href="#" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
+              <Link to="/privacy" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
+              <Link to="/terms" className="text-white/70 hover:text-white transition-colors border-b border-transparent hover:border-white/40">
                 Terms & Conditions
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
