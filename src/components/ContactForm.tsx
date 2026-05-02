@@ -40,34 +40,6 @@ export default function ContactForm() {
     }
   };
 
-  // handleSubmit ની અંદર આ મુજબ ફેરફાર કરો
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!formRef.current) return;
-
-    setLoading(true);
-    try {
-      // 1. Google reCAPTCHA પાસેથી ટોકન મેળવો
-      // @ts-ignore
-      const token = await window.grecaptcha.execute('YOUR_RECAPTCHA_SITE_KEY', {action: 'submit'});
-
-      // 2. EmailJS ને ટોકન સાથે ડેટા મોકલો
-      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
-        publicKey: PUBLIC_KEY,
-        'g-recaptcha-response': token // આ પેરામીટર એરર દૂર કરશે
-      });
-
-      toast.success("Message sent with reCAPTCHA verification!");
-      formRef.current.reset();
-    } catch (err) {
-      console.error(err);
-      toast.error("reCAPTCHA Verification Failed or Network Error.");
-    } finally {
-      setLoading(false);
-    }
-};
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formRef.current) return;
