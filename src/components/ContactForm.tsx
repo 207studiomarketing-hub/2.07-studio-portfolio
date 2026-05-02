@@ -81,10 +81,6 @@ export default function ContactForm() {
 
       // Track Success in GA
       trackFormSubmission("success", serviceSelected);
-
-      toast.success("Message sent! 2.07 Studio will contact you shortly.");
-      // Track Success in GA
-      trackFormSubmission("success", serviceSelected);
       
       toast.success("Message sent! 2.07 Studio will contact you shortly.");
      // toast.success("Message sent with reCAPTCHA verification!");
@@ -92,6 +88,7 @@ export default function ContactForm() {
       formRef.current.reset();
     } catch (err) {
       // Track Error in GA
+     // console.log(err.message);
       trackFormSubmission("error", serviceSelected);
       toast.error("Something went wrong. Please try again.");
     } finally {
