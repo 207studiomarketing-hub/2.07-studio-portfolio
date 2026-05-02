@@ -70,14 +70,19 @@ export default function ContactForm() {
       }
 
         // 1. Google reCAPTCHA પાસેથી ટોકન મેળવો
-      // @ts-ignore
-      const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
+        // @ts-ignore
+    const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
 
-        // 2. EmailJS ને ટોકન સાથે ડેટા મોકલો
-      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
-        publicKey: PUBLIC_KEY,
-        'g-recaptcha-response': token // આ પેરામીટર એરર દૂર કરશે
-      });
+    // ૨. આ ટોકનને ફોર્મના છુપાયેલા ઇનપુટમાં સેટ કરો
+    const captchaInput = document.getElementById('g-recaptcha-response') as HTMLInputElement;
+    if (captchaInput) {
+      captchaInput.value = token;
+    }
+
+    // ૩. હવે સાદું sendForm કોલ કરો (વધારાના પેરામીટર વગર)
+    await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
+      publicKey: PUBLIC_KEY,
+    });
       
       // Track Success in GA
       trackFormSubmission("success", serviceSelected);
@@ -144,6 +149,7 @@ export default function ContactForm() {
           placeholder="Describe your vision..."
         />
       </label>
+<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
 
       <button
         type="submit"
