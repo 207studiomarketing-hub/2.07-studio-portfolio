@@ -8,6 +8,21 @@ import MagneticButton from "@/components/MagneticButton";
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
+    // આ સેક્શનમાં આપણે Google Analytics ની સ્ક્રિપ્ટ ઉમેરી રહ્યા છીએ
+    scripts: [
+      {
+        src: "https://googletagmanager.com",
+        async: true,
+      },
+      {
+        children: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'YOUR_G_MEASUREMENT_ID');
+        `,
+      },
+    ],
     meta: [
       { title: "2.07 Studio — Where Idea Takes Shape" },
       {
@@ -25,6 +40,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
 });
+
 
 const SERVICES = [
   {
