@@ -69,21 +69,20 @@ export default function ContactForm() {
         return;
       }
 
-        // 1. Google reCAPTCHA પાસેથી ટોકન મેળવો
-        // @ts-ignore
-    const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
+         // 1. Google reCAPTCHA પાસેથી ટોકન મેળવો
+      // @ts-ignore
+      const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
 
-    // ૨. આ ટોકનને ફોર્મના છુપાયેલા ઇનપુટમાં સેટ કરો
-    const captchaInput = document.getElementById('g-recaptcha-response') as HTMLInputElement;
-    if (captchaInput) {
-      captchaInput.value = token;
-    }
+        // 2. EmailJS ને ટોકન સાથે ડેટા મોકલો
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
+        publicKey: PUBLIC_KEY,
+        'g-recaptcha-response': token // આ પેરામીટર એરર દૂર કરશે
+      });
 
-    // ૩. હવે સાદું sendForm કોલ કરો (વધારાના પેરામીટર વગર)
-    await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
-      publicKey: PUBLIC_KEY,
-    });
-      
+      // Track Success in GA
+      trackFormSubmission("success", serviceSelected);
+
+      toast.success("Message sent! 2.07 Studio will contact you shortly.");
       // Track Success in GA
       trackFormSubmission("success", serviceSelected);
       
