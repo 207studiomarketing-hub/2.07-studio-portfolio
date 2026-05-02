@@ -5,10 +5,11 @@ import { Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-// I will provide these IDs from my EmailJS dashboard.
-const SERVICE_ID = "YOUR_SERVICE_ID";
-const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+// --- તમારે આ IDs તમારા ડેશબોર્ડ પરથી બદલવાના છે ---
+const SERVICE_ID = "service_7u6k1vk";
+const TEMPLATE_ID = "template_9yujlhs";
+const PUBLIC_KEY = "ZVgBi_QYljY-IdxcW";
+const GA_MEASUREMENT_ID = "G-HZHN03564M"; // તમારો G-XXXXXXXXXX ID
 
 const schema = z.object({
   user_name: z.string().trim().min(2, "Please enter your full name").max(100),
@@ -28,15 +29,28 @@ export default function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
 
+  // Google Analytics Event Trigger function
+  const trackFormSubmission = (status: "success" | "error", service: string) => {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "form_submission", {
+        event_category: "Contact",
+        event_label: service,
+        status: status,
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formRef.current) return;
 
     const fd = new FormData(formRef.current);
+    const serviceSelected = fd.get("service_type") as string;
+    
     const parsed = schema.safeParse({
       user_name: fd.get("user_name"),
       user_email: fd.get("user_email"),
-      service_type: fd.get("service_type"),
+      service_type: serviceSelected,
       message: fd.get("message"),
     });
 
@@ -47,23 +61,27 @@ export default function ContactForm() {
 
     setLoading(true);
     try {
-      if (
-        SERVICE_ID.startsWith("YOUR_") ||
-        TEMPLATE_ID.startsWith("YOUR_") ||
-        PUBLIC_KEY.startsWith("YOUR_")
-      ) {
-        await new Promise((r) => setTimeout(r, 800));
-        toast.success("Message ready — add your EmailJS keys to send for real.");
+      // Demo Check
+      if (SERVICE_ID.startsWith("YOUR_") || PUBLIC_KEY.startsWith("YOUR_")) {
+        await new Promise((r) => setTimeout(r, 1200));
+        toast.success("Ready! Add your real keys to send emails.");
         formRef.current.reset();
         return;
       }
 
+      // Actual Email Send
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
         publicKey: PUBLIC_KEY,
       });
-      toast.success("Message sent. We'll be in touch shortly.");
+
+      // Track Success in GA
+      trackFormSubmission("success", serviceSelected);
+      
+      toast.success("Message sent! 2.07 Studio will contact you shortly.");
       formRef.current.reset();
     } catch (err) {
+      // Track Error in GA
+      trackFormSubmission("error", serviceSelected);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -81,62 +99,54 @@ export default function ContactForm() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6 }}
-      className="grid gap-6 md:gap-8 max-w-2xl mx-auto"
+      className="grid gap-6 md:gap-8 max-w-2xl mx-auto p-6 bg-black/40 backdrop-blur-sm rounded-lg"
     >
       <div className="grid md:grid-cols-2 gap-6">
         <label className="block">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/60">Full Name</span>
-          <input name="user_name" type="text" required className={inputCls} placeholder="John Doe" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-medium">Full Name</span>
+          <input name="user_name" type="text" required className={inputCls} placeholder="Your Name" />
         </label>
         <label className="block">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/60">Email</span>
-          <input name="user_email" type="email" required className={inputCls} placeholder="hello@domain.com" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-medium">Email Address</span>
+          <input name="user_email" type="email" required className={inputCls} placeholder="email@example.com" />
         </label>
       </div>
 
       <label className="block">
-        <span className="text-xs uppercase tracking-[0.2em] text-white/60">Service Interest</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-medium">What service are you looking for?</span>
         <select
           name="service_type"
           required
           defaultValue=""
           className={inputCls + " appearance-none cursor-pointer"}
         >
-          <option value="" disabled className="bg-black">
-            Select a service
-          </option>
+          <option value="" disabled className="bg-zinc-900">Choose a service</option>
           {SERVICES.map((s) => (
-            <option key={s} value={s} className="bg-black">
-              {s}
-            </option>
+            <option key={s} value={s} className="bg-zinc-900">{s}</option>
           ))}
         </select>
       </label>
 
       <label className="block">
-        <span className="text-xs uppercase tracking-[0.2em] text-white/60">Message</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-medium">Project Brief</span>
         <textarea
           name="message"
           required
           rows={4}
           className={inputCls + " resize-none"}
-          placeholder="Tell us about your project..."
+          placeholder="Describe your vision..."
         />
       </label>
 
       <button
         type="submit"
         disabled={loading}
-        className="group relative inline-flex items-center justify-center gap-3 self-start mt-2 px-8 py-4 bg-white text-black font-semibold uppercase tracking-[0.2em] text-sm transition-all hover:scale-[1.03] disabled:opacity-60 disabled:hover:scale-100"
+        className="group relative inline-flex items-center justify-center gap-3 self-start mt-2 px-10 py-4 bg-white text-black font-bold uppercase tracking-[0.2em] text-xs transition-all hover:bg-zinc-200 active:scale-95 disabled:opacity-50"
       >
         {loading ? (
-          <>
-            <Loader2 className="w-4 h-4 animate-spin" /> Sending...
-          </>
+          <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
         ) : (
-          <>
-            Send Message <Send className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </>
+          <>Send Message <Send className="w-4 h-4 transition-transform group-hover:translate-x-1" /></>
         )}
       </button>
     </motion.form>
