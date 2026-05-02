@@ -71,12 +71,12 @@ export default function ContactForm() {
 
          // 1. Google reCAPTCHA પાસેથી ટોકન મેળવો
       // @ts-ignore
-      const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
+     // const token = await window.grecaptcha.execute('6LdeGNUsAAAAAP_i6pEhJIGn660ibSZ_bPlydQrl', {action: 'submit'});
 
         // 2. EmailJS ને ટોકન સાથે ડેટા મોકલો
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
         publicKey: PUBLIC_KEY,
-        'g-recaptcha-response': token // આ પેરામીટર એરર દૂર કરશે
+       // 'g-recaptcha-response': token // આ પેરામીટર એરર દૂર કરશે
       });
 
       // Track Success in GA
